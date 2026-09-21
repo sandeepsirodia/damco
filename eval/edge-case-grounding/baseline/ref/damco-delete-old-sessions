@@ -1,0 +1,38 @@
+[
+  {
+    "filePath": "package.json",
+    "description": "No job scheduling dependency (such as node-cron or bree) is installed in package.json. Running a scheduled cleanup job requires either introducing a new dependency or relying on native timers (e.g., setInterval) without built-in jitter or error-recovery features.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/server.js",
+    "description": "If the scheduled job is initiated within server.js, scaling the Express application across multiple instances/containers will cause overlapping background deletion workers to run simultaneously against PostgreSQL, causing potential lock contention.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/db/schema.sql",
+    "description": "Hard-deleting session records from the database will fail if foreign key constraints exist on dependent tables (e.g., questions, generated documents, pipeline runs) without ON DELETE CASCADE.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/routes/sessions.js",
+    "description": "Because the choice between soft delete and hard delete was skipped, choosing soft delete (deleted_at) will cause existing session query routes to continue returning expired sessions unless all read endpoints in src/routes/sessions.js are updated with active-record filtering.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": "src/pipeline/repoReader.js",
+    "description": "If sessions download or clone repositories to disk, removing database records alone will orphan cached repositories and files on the host filesystem, defeating unbounded storage prevention.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Sessions may be evaluated for deletion using created_at rather than updated_at or last_accessed_at, risking the unexpected deletion of long-running or recently active workflows that were opened over 30 days ago.",
+    "confidence": "high",
+    "grounded": false
+  }
+]

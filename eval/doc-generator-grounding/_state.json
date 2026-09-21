@@ -1,0 +1,21 @@
+{
+  "metrics": {
+    "all_grounded": {
+      "label": "All Grounded",
+      "kind": "binary"
+    },
+    "grounding_rate": {
+      "label": "Grounding Rate",
+      "kind": "continuous"
+    },
+    "nonempty": {
+      "label": "Non-empty",
+      "kind": "binary"
+    }
+  },
+  "perf_fields": [
+    "prd_chars",
+    "trd_chars"
+  ],
+  "harness_sha": "485c8bc36ee34ee265924edc570543876d267c2cfd330d14ee79c87d0cc876f9"
+}

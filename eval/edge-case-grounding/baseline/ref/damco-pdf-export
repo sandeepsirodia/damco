@@ -1,0 +1,38 @@
+[
+  {
+    "filePath": "package.json",
+    "description": "Missing dependencies: The project currently has no PDF generation or markdown-to-HTML rendering libraries (e.g., pdfkit, marked, puppeteer, or jspdf) installed.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "Dockerfile",
+    "description": "If server-side rendering with a headless browser (such as Puppeteer or Playwright) is selected for converting HTML/markdown to PDF, the Docker container will fail without additional OS-level system libraries and font packages.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/routes/sessions.js",
+    "description": "Exporting on demand must handle sessions where PRD and TRD documents have not yet been generated (e.g., sessions still awaiting clarification answers or in progress), returning appropriate HTTP 400/409 errors rather than generating empty or broken PDFs.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "public/index.html",
+    "description": "Adding an export button requires handling asynchronous generation states (e.g., disabling the button and showing a loading indicator) to prevent users from triggering multiple concurrent PDF generation requests while waiting.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Markdown syntax rendering quirks in PDF export: complex markdown elements like tables, code blocks, and blockquotes risk awkward page breaks and truncation without dedicated print styling/CSS pagination rules.",
+    "confidence": "medium",
+    "grounded": false
+  },
+  {
+    "filePath": null,
+    "description": "Resource exhaustion risk: on-demand PDF generation is CPU- and memory-intensive; without rate limiting or concurrency throttling, repeated download triggers could degrade the Node.js server.",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

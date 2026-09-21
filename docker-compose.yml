@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: spec_clarity
+    ports:
+      - "25432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/spec_clarity
+      FS_BROWSE_ROOT: ${HOST_REPOS_DIR}
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mounted read-only at the same absolute path as the host so repo
+      # paths picked via the folder browser (or typed by hand) resolve
+      # identically whether read inside the container or on the host.
+      # HOST_REPOS_DIR comes from .env (see env.example) -- set it to
+      # whatever local directory holds the repos you want to browse.
+      - ${HOST_REPOS_DIR}:${HOST_REPOS_DIR}:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:

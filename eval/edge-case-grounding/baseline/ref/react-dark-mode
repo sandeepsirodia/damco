@@ -1,0 +1,44 @@
+[
+  {
+    "filePath": "package.json",
+    "description": "No styling framework (e.g., Tailwind, styled-components) or CSS architecture is present in dependencies or the file list, requiring a decision on how theme classes or CSS variables will be injected and applied across components.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "package.json",
+    "description": "No icon library (such as lucide-react or react-icons) is installed, which may be needed for standard dark/light mode toggle UI icons.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": "src/App.jsx",
+    "description": "Theme state must be managed globally (e.g., via React Context) at the top-level App component so that class updates on document.documentElement/body and child component access remain synchronized.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/components/Header.jsx",
+    "description": "Header will host the toggle control but currently lacks dark mode state access, accessible switch attributes (e.g., aria-label, aria-pressed), and theme-aware styling.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Default preference behavior was left undefined; implementation must decide whether to fall back to 'light' or query window.matchMedia('(prefers-color-scheme: dark)') when localStorage has no saved key.",
+    "confidence": "high",
+    "grounded": false
+  },
+  {
+    "filePath": null,
+    "description": "Reading localStorage inside React components on mount can cause a flash of incorrect theme (FOUC) before the dark theme class is applied.",
+    "confidence": "medium",
+    "grounded": false
+  },
+  {
+    "filePath": null,
+    "description": "Direct localStorage access can throw security exceptions in private browsing mode or when storage access is restricted by browser policy; read/write operations must be safely guarded.",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "filePath": "src/routes/sessions.js",
+    "description": "Must enforce the rule that sessions already pushed to GitHub cannot be edited or resubmitted; the route handler needs to check the GitHub write-back status before triggering pipeline re-execution.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/pipeline/index.js",
+    "description": "Ambiguity in 're-run the whole pipeline': if step 2 (clarification agent) is re-executed, it will generate new questions that mismatch the user's submitted answers. The re-run should orchestrate steps downstream of clarification (blast radius, edge cases, estimate, doc generation, coverage gate) using the updated answers.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/db/schema.sql",
+    "description": "Overwriting existing findings, estimates, and documents on resubmission requires careful handling of foreign keys and cascading deletes to prevent orphaned records or constraint violations.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": "public/index.html",
+    "description": "The client interface needs to retain and pre-fill the user's previous answers for editing, disable the edit/resubmit action once a GitHub write-back has occurred, and handle loading states during the re-run.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Concurrent resubmissions or rapid double-clicks on resubmit could trigger parallel pipeline executions for the same session, resulting in race conditions during database writes.",
+    "confidence": "medium",
+    "grounded": false
+  },
+  {
+    "filePath": null,
+    "description": "Re-running the pipeline triggers multiple consecutive LLM calls (edge case detection, classification, doc generation), risking client or server HTTP timeouts if handled synchronously in a single request.",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "filePath": "requirements.txt",
+    "description": "Repo lacks an image processing or validation library (such as Pillow or python-magic) to verify actual file magic bytes, leaving file validation vulnerable to extension or MIME-type spoofing.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "app.py",
+    "description": "Needs `MAX_CONTENT_LENGTH` configured to prevent Denial of Service via oversized file uploads, as well as unique filename generation (e.g., UUIDs) and sanitization (`secure_filename`) to avoid file collision and path traversal attacks.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "models.py",
+    "description": "Adding an avatar path column to the existing user model will require a database schema migration, but no migration tool (like Flask-Migrate or Alembic) is configured in the repo.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "app.py",
+    "description": "Lack of file lifecycle management may lead to orphaned image files accumulating on disk when users upload a new avatar or delete their account.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Storing uploads on local disk is problematic in containerized or multi-worker/multi-instance environments running Gunicorn, where disk storage is ephemeral or not shared across instances.",
+    "confidence": "high",
+    "grounded": false
+  }
+]

@@ -1,0 +1,646 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec Clarity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          border: 'hsl(var(--border) / <alpha-value>)',
+          input: 'hsl(var(--input) / <alpha-value>)',
+          ring: 'hsl(var(--ring) / <alpha-value>)',
+          background: 'hsl(var(--background) / <alpha-value>)',
+          foreground: 'hsl(var(--foreground) / <alpha-value>)',
+          primary: { DEFAULT: 'hsl(var(--primary) / <alpha-value>)', foreground: 'hsl(var(--primary-foreground) / <alpha-value>)' },
+          secondary: { DEFAULT: 'hsl(var(--secondary) / <alpha-value>)', foreground: 'hsl(var(--secondary-foreground) / <alpha-value>)' },
+          destructive: { DEFAULT: 'hsl(var(--destructive) / <alpha-value>)', foreground: 'hsl(var(--destructive-foreground) / <alpha-value>)' },
+          muted: { DEFAULT: 'hsl(var(--muted) / <alpha-value>)', foreground: 'hsl(var(--muted-foreground) / <alpha-value>)' },
+          accent: { DEFAULT: 'hsl(var(--accent) / <alpha-value>)', foreground: 'hsl(var(--accent-foreground) / <alpha-value>)' },
+          card: { DEFAULT: 'hsl(var(--card) / <alpha-value>)', foreground: 'hsl(var(--card-foreground) / <alpha-value>)' },
+          warning: 'hsl(var(--warning) / <alpha-value>)',
+          success: 'hsl(var(--success) / <alpha-value>)',
+          violet: 'hsl(var(--violet) / <alpha-value>)',
+        },
+        borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 1px)', sm: 'calc(var(--radius) - 1px)' },
+        borderColor: { DEFAULT: 'hsl(var(--border) / <alpha-value>)' },
+        fontFamily: { display: ["'Courier Prime'",'ui-monospace','monospace'], serif: ["'Source Serif 4'",'ui-serif','Georgia','serif'] },
+      }
+    }
+  }
+</script>
+<style>
+  :root{
+    /* "Day desk" -- paper, ink, a single rust stamp accent */
+    --background: 42 38% 92%; --foreground: 20 18% 14%;
+    --card: 45 42% 97%; --card-foreground: 20 18% 14%;
+    --primary: 14 62% 42%; --primary-foreground: 42 45% 97%;
+    --secondary: 38 26% 86%; --secondary-foreground: 20 18% 14%;
+    --muted: 40 24% 88%; --muted-foreground: 25 12% 40%;
+    --accent: 38 26% 86%; --accent-foreground: 20 18% 14%;
+    --destructive: 6 68% 38%; --destructive-foreground: 42 45% 97%;
+    --border: 32 18% 72%; --input: 32 18% 68%; --ring: 14 62% 42%;
+    --warning: 38 72% 38%; --success: 148 32% 26%; --violet: 215 45% 32%;
+    --radius: 3px;
+    --grain-opacity: 0.05;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --background: 24 24% 9%; --foreground: 42 35% 88%;
+      --card: 26 20% 13%; --card-foreground: 42 35% 88%;
+      --primary: 14 72% 58%; --primary-foreground: 24 24% 8%;
+      --secondary: 28 16% 18%; --secondary-foreground: 42 35% 88%;
+      --muted: 28 16% 18%; --muted-foreground: 34 14% 60%;
+      --accent: 28 16% 20%; --accent-foreground: 42 35% 88%;
+      --destructive: 8 70% 55%; --destructive-foreground: 24 24% 9%;
+      --border: 30 14% 26%; --input: 30 14% 30%; --ring: 14 72% 58%;
+      --warning: 40 75% 58%; --success: 148 35% 52%; --violet: 212 45% 62%;
+      --grain-opacity: 0.09;
+    }
+  }
+  :root[data-theme="dark"]{
+    --background: 24 24% 9%; --foreground: 42 35% 88%;
+    --card: 26 20% 13%; --card-foreground: 42 35% 88%;
+    --primary: 14 72% 58%; --primary-foreground: 24 24% 8%;
+    --secondary: 28 16% 18%; --secondary-foreground: 42 35% 88%;
+    --muted: 28 16% 18%; --muted-foreground: 34 14% 60%;
+    --accent: 28 16% 20%; --accent-foreground: 42 35% 88%;
+    --destructive: 8 70% 55%; --destructive-foreground: 24 24% 9%;
+    --border: 30 14% 26%; --input: 30 14% 30%; --ring: 14 72% 58%;
+    --warning: 40 75% 58%; --success: 148 35% 52%; --violet: 212 45% 62%;
+    --grain-opacity: 0.09;
+  }
+  html{color-scheme:dark light;}
+  body{
+    background:hsl(var(--background)); color:hsl(var(--foreground));
+    font-family:'Source Serif 4',ui-serif,Georgia,serif;
+    position:relative;
+  }
+  /* paper grain -- subtle noise so flat colour fields read as paper, not plastic */
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    opacity:var(--grain-opacity); mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  :root[data-theme="dark"] body::before, @media (prefers-color-scheme: dark){ body::before{ mix-blend-mode:overlay; } }
+  button{cursor:pointer; font-family:'Courier Prime',ui-monospace,monospace;}
+  button[disabled]{cursor:not-allowed; opacity:.5;}
+  input,textarea,select{font-family:'Source Serif 4',ui-serif,Georgia,serif;}
+  ::selection{background:hsl(var(--primary) / .25);}
+
+  .type-label{font-family:'Courier Prime',ui-monospace,monospace; text-transform:uppercase; letter-spacing:.09em;}
+
+  .panel{animation:rise .3s ease both;}
+  @keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+  @keyframes stampIn{0%{opacity:0; transform:scale(1.5) rotate(-14deg);} 60%{opacity:1;} 100%{opacity:1; transform:scale(1) rotate(-6deg);}}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important;}}
+
+  /* ---- Header: rotary ink stamp mark + folder-tab step nav ---- */
+  .stamp-mark{
+    width:2.1rem; height:2.1rem; border-radius:50%; border:2px solid hsl(var(--primary));
+    color:hsl(var(--primary)); display:grid; place-items:center; transform:rotate(-8deg);
+    font-family:'Courier Prime',monospace; font-weight:700; font-size:.72rem; letter-spacing:.03em;
+    flex-shrink:0;
+  }
+  .folder-nav{display:flex; align-items:flex-end; gap:.15rem;}
+  .folder-tab{
+    font-family:'Courier Prime',monospace; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em;
+    padding:.5rem .9rem .45rem; background:hsl(var(--secondary)); color:hsl(var(--muted-foreground));
+    border:1px solid hsl(var(--border)); border-bottom:none;
+    clip-path:polygon(8% 0,92% 0,100% 100%,0% 100%);
+    transform:translateY(3px);
+  }
+  .folder-tab[data-active="true"]{
+    background:hsl(var(--card)); color:hsl(var(--foreground)); transform:translateY(0);
+    box-shadow:0 -1px 0 hsl(var(--card));
+  }
+  .folder-tab:not([disabled]):hover{color:hsl(var(--foreground));}
+
+  /* ---- Paper cards ---- */
+  .paper{ background:hsl(var(--card)); border:1px solid hsl(var(--border)); border-radius:var(--radius); position:relative; }
+  .paper-torn{ border-top:none; }
+  .paper-torn::before{
+    content:''; display:block; height:9px; margin:0 -1px;
+    background:hsl(var(--background));
+    -webkit-mask-image:radial-gradient(circle at 6px 0, transparent 6px, black 6.5px);
+    mask-image:radial-gradient(circle at 6px 0, transparent 6px, black 6.5px);
+    -webkit-mask-size:12px 9px; mask-size:12px 9px; mask-repeat:repeat-x;
+    border-left:1px solid hsl(var(--border)); border-right:1px solid hsl(var(--border));
+  }
+  .rule-dashed{border-style:dashed !important;}
+
+  /* ---- Stamp / rubber-stamp button ---- */
+  .btn-stamp{
+    font-family:'Courier Prime',monospace; text-transform:uppercase; letter-spacing:.06em; font-weight:700;
+    background:hsl(var(--primary)); color:hsl(var(--primary-foreground)); border:none; border-radius:var(--radius);
+    transform:rotate(-1.2deg); transition:transform .12s ease, opacity .12s ease;
+    box-shadow:2px 3px 0 hsl(var(--foreground) / .18);
+  }
+  .btn-stamp:not(:disabled):hover{transform:rotate(0deg) translateY(-1px);}
+  .btn-stamp:not(:disabled):active{transform:rotate(0deg) scale(.97); box-shadow:1px 1px 0 hsl(var(--foreground) / .18);}
+  .btn-ghost{
+    font-family:'Courier Prime',monospace; text-transform:uppercase; letter-spacing:.06em; font-size:.72rem;
+    background:transparent; border:1px solid hsl(var(--border)); color:hsl(var(--muted-foreground)); border-radius:var(--radius);
+  }
+  .btn-ghost:hover{color:hsl(var(--foreground)); border-color:hsl(var(--foreground) / .4);}
+  .btn-loading::before{content:""; width:11px; height:11px; border-radius:50%; border:2px solid hsl(var(--primary-foreground) / .4); border-top-color:hsl(var(--primary-foreground)); animation:spin .7s linear infinite; display:inline-block;}
+
+  /* ---- Exhibit tag (file citation) ---- */
+  .cite{
+    font-family:'Courier Prime',monospace; font-size:.78em; background:hsl(var(--muted));
+    border:1px solid hsl(var(--border)); padding:1px 6px; border-radius:2px; white-space:nowrap;
+  }
+
+  /* ---- Document prose (PRD/TRD) ---- */
+  .prose-doc h3{
+    font-family:'Courier Prime',monospace; font-size:.82rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em;
+    margin-top:1.75rem; margin-bottom:.6rem; color:hsl(var(--primary));
+    padding-bottom:.35rem; border-bottom:1px dashed hsl(var(--border));
+  }
+  .prose-doc h3:first-child{margin-top:0;}
+  .prose-doc p{margin:0 0 .9rem; line-height:1.75; font-size:.98rem;}
+  .prose-doc ul{margin:0 0 1rem; padding-left:1.25rem; display:flex; flex-direction:column; gap:.5rem;}
+  .prose-doc li{line-height:1.65; font-size:.98rem;}
+  .prose-doc strong{color:hsl(var(--foreground)); font-weight:700;}
+  .prose-doc code{font-family:'Courier Prime',monospace; font-size:.82em; background:hsl(var(--muted)); padding:.05rem .35rem; border-radius:2px;}
+
+  /* ---- Exhibit question cards ---- */
+  .exhibit-tab{
+    font-family:'Courier Prime',monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.07em;
+    background:hsl(var(--primary)); color:hsl(var(--primary-foreground)); padding:.15rem .5rem; border-radius:2px;
+    display:inline-block; transform:rotate(-2deg);
+  }
+  .exhibit-axis{font-family:'Courier Prime',monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; color:hsl(var(--muted-foreground));}
+  #qsheet > div{animation:rise .32s ease both;}
+  #qsheet > div:nth-child(1){animation-delay:.02s;} #qsheet > div:nth-child(2){animation-delay:.07s;}
+  #qsheet > div:nth-child(3){animation-delay:.12s;} #qsheet > div:nth-child(4){animation-delay:.17s;}
+  #qsheet > div:nth-child(5){animation-delay:.22s;} #qsheet > div:nth-child(n+6){animation-delay:.26s;}
+
+  .flag-btn{
+    font-family:'Courier Prime',monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em;
+    padding:.3rem .55rem; border-radius:2px; border:1px solid hsl(var(--border)); color:hsl(var(--muted-foreground));
+    background:transparent;
+  }
+  .flag-btn:hover{border-color:hsl(var(--foreground) / .4); color:hsl(var(--foreground));}
+  .flag-btn[data-active="true"]{
+    background:hsl(var(--warning) / .16); color:hsl(var(--warning)); border-color:hsl(var(--warning));
+    transform:rotate(-2deg);
+  }
+
+  /* ---- Stat tiles ---- */
+  .stat-tile{background:hsl(var(--card)); border:1px solid hsl(var(--border)); border-radius:var(--radius); padding:.9rem 1rem;}
+  .stat-num{font-family:'Courier Prime',monospace; font-size:1.35rem; font-weight:700;}
+  .stamp-verdict{
+    display:inline-block; font-family:'Courier Prime',monospace; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+    border:2.5px solid currentColor; border-radius:4px; padding:.15rem .5rem; transform:rotate(-6deg);
+    animation:stampIn .4s ease both;
+  }
+
+  /* ---- Sidebar rail ---- */
+  .index-tab{
+    font-family:'Courier Prime',monospace; font-size:.74rem; background:hsl(var(--muted)); border:1px dashed hsl(var(--border));
+    padding:.25rem .55rem; border-radius:2px; display:inline-block;
+  }
+  .index-tab:nth-child(odd){transform:rotate(-1deg);}
+  .index-tab:nth-child(even){transform:rotate(1deg);}
+  #railDriving{border-left:2px solid hsl(var(--primary)); padding-left:.85rem;}
+
+  /* ---- Tabs (PRD/TRD/Open Questions) ---- */
+  .doc-tab{
+    font-family:'Courier Prime',monospace; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em;
+    padding:.5rem 1rem; color:hsl(var(--muted-foreground)); border-bottom:2px solid transparent;
+  }
+  .doc-tab[data-active="true"]{color:hsl(var(--primary)); border-color:hsl(var(--primary));}
+  .doc-tab:hover{color:hsl(var(--foreground));}
+
+  ::-webkit-scrollbar{width:10px; height:10px;}
+  ::-webkit-scrollbar-thumb{background:hsl(var(--border)); border-radius:5px;}
+</style>
+</head>
+<body class="text-sm">
+<script>document.documentElement.setAttribute('data-theme','dark');</script>
+
+<div class="min-h-screen flex flex-col relative" style="z-index:1">
+
+  <header class="flex items-end gap-5 flex-wrap px-6 pt-5 border-b border-border">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="stamp-mark">SC</div>
+      <div>
+        <h1 class="font-display font-bold text-[19px] leading-none tracking-tight">Spec Clarity</h1>
+        <div class="type-label text-[10px] text-muted-foreground mt-1">Case file · feature spec</div>
+      </div>
+    </div>
+    <nav id="stepper" class="folder-nav">
+      <button data-step="1" class="folder-tab">Input</button>
+      <button data-step="2" class="folder-tab" disabled>Clarify</button>
+      <button data-step="3" class="folder-tab" disabled>Results</button>
+    </nav>
+    <div class="flex items-center gap-2 mb-3 ml-auto">
+      <span id="providerBadge" class="type-label text-[10px] text-muted-foreground border border-border rounded px-2 py-1"></span>
+      <button id="themeToggle" onclick="toggleTheme()" class="h-8 w-8 border border-border bg-card grid place-items-center text-muted-foreground" style="border-radius:var(--radius)" aria-label="Toggle color theme">
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-4 h-4"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" hidden><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-5xl w-full mx-auto px-6 py-8">
+
+    <section class="panel" id="panel-1">
+      <div class="flex items-center gap-2 type-label text-[11px] text-muted-foreground mb-5">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-3.5 h-3.5"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+        <span>Point this at any repo</span>
+      </div>
+      <h2 class="font-display text-2xl font-bold tracking-tight mb-2">Describe the feature</h2>
+      <p class="text-muted-foreground text-[15px] mb-6 max-w-[62ch] italic">A raw, messy ask goes in. It reads the repo before it asks you anything back.</p>
+      <div class="grid md:grid-cols-[1.4fr_1fr] gap-5 items-start">
+        <div class="paper rule-dashed p-6" style="border-style:dashed">
+          <div class="space-y-1.5 mb-4">
+            <label for="f-desc" class="type-label text-[11px] text-muted-foreground">Statement of work</label>
+            <textarea id="f-desc" rows="3" placeholder="e.g. Let's add a way for ops to export orders as CSV..." class="flex w-full border border-input bg-transparent px-3 py-2 text-[15px] placeholder:text-muted-foreground placeholder:not-italic italic focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" style="border-radius:var(--radius)"></textarea>
+          </div>
+          <div class="space-y-1.5 mb-4">
+            <label for="f-repo" class="type-label text-[11px] text-muted-foreground">Case reference (repo)</label>
+            <input id="f-repo" type="text" placeholder="/path/to/repo or https://github.com/org/repo" class="flex w-full border border-input bg-transparent px-3 py-2 text-[15px] font-display placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" style="border-radius:var(--radius)">
+          </div>
+          <div class="space-y-1.5 mb-5">
+            <label for="f-pat" class="type-label text-[11px] text-muted-foreground">GitHub PAT <span class="normal-case font-normal text-muted-foreground not-italic">(optional — enables write-back and cloning private repos)</span></label>
+            <input type="password" id="f-pat" placeholder="ghp_..." class="flex w-full border border-input bg-transparent px-3 py-2 text-[15px] font-display placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" style="border-radius:var(--radius)">
+            <div class="text-[11px] text-muted-foreground">🔒 Held in memory for this request only. Never written to disk or the database.</div>
+          </div>
+          <div id="err1" class="hidden text-xs text-destructive mb-3"></div>
+          <div class="flex items-center justify-between gap-3">
+            <div id="idleStatus1" class="flex items-center gap-2 type-label text-[10px] text-muted-foreground"><span class="dot w-1.5 h-1.5 rounded-full bg-success"></span><span>Idle — nothing running</span></div>
+            <button id="submitBtn" onclick="submitIntake()" class="btn-stamp inline-flex items-center gap-2 text-xs h-9 px-4">File case →</button>
+          </div>
+        </div>
+        <div class="paper p-6">
+          <div class="type-label text-[11px] text-muted-foreground mb-3">Procedure</div>
+          <div class="space-y-3.5 text-[13px] text-muted-foreground">
+            <div class="flex gap-2.5"><span class="font-display text-primary font-bold">01</span><span><span class="font-semibold text-foreground not-italic">Repo Context Reader</span> walks the file tree (gitignore-aware), pulls in README + package manifest — no embeddings, just a compact text summary.</span></div>
+            <div class="flex gap-2.5"><span class="font-display text-primary font-bold">02</span><span><span class="font-semibold text-foreground not-italic">Clarification Agent</span> makes one LLM call and asks 3–5 questions, always probing the four fixed axes.</span></div>
+            <div class="flex gap-2.5"><span class="font-display text-primary font-bold">03</span><span>Vague or skipped answers become an <span class="inline-flex items-center bg-warning/15 text-warning px-1.5 py-0.5 text-[10px] font-display font-bold uppercase" style="border-radius:2px">assumption made</span> entry later, not a silent gap.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-2" hidden>
+      <div class="flex items-center gap-2 type-label text-[11px] text-muted-foreground mb-5">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-3.5 h-3.5"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+        <span id="bcRepo2" class="font-display"></span>
+      </div>
+      <h2 class="font-display text-2xl font-bold tracking-tight mb-2">Answer the clarifying questions</h2>
+      <p class="text-muted-foreground text-[15px] mb-5 italic">Every question below is grounded in what was actually found — nothing generic. Leave blank to skip.</p>
+      <div id="scanPills" class="flex flex-wrap gap-2 mb-6"></div>
+      <div id="qsheet" class="space-y-3.5 mb-6"></div>
+      <div id="err2" class="hidden text-xs text-destructive mb-3"></div>
+      <div class="flex items-center justify-between gap-3">
+        <div id="idleStatus2" class="flex items-center gap-2 type-label text-[10px] text-muted-foreground"><span class="dot w-1.5 h-1.5 rounded-full bg-success"></span><span>Idle — nothing running</span></div>
+        <div class="flex gap-2">
+          <button onclick="goStep(1)" class="btn-ghost inline-flex items-center h-9 px-4">← Back</button>
+          <button id="answersBtn" onclick="submitAnswers()" class="btn-stamp inline-flex items-center gap-2 text-xs h-9 px-4">Generate PRD / TRD →</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-3" hidden>
+      <div class="flex items-center gap-2 type-label text-[11px] text-muted-foreground mb-4">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-3.5 h-3.5"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+        <span id="bcRepo3" class="font-display"></span><span>·</span><span id="bcSession" class="font-display"></span>
+      </div>
+      <div class="flex justify-between items-start gap-4 flex-wrap mb-5">
+        <div>
+          <h2 id="resTitle" class="font-display text-xl font-bold tracking-tight"></h2>
+          <div class="flex items-center gap-2 text-[13px] text-muted-foreground mt-1.5 italic"><span class="w-1.5 h-1.5 rounded-full bg-success"></span><span>Grounded in the repo — ready for review.</span></div>
+          <div id="resPills" class="flex flex-wrap gap-2 mt-3"></div>
+        </div>
+        <div class="flex flex-col items-end gap-2">
+          <input type="password" id="f-pat-2" placeholder="GitHub PAT to enable push" class="text-xs font-display border border-input bg-transparent px-2 py-1.5 w-56" style="border-radius:var(--radius)">
+          <button id="gh-btn" onclick="pushGithub()" class="btn-stamp inline-flex items-center gap-2 text-xs h-9 px-4">Submit to record →</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <div class="stat-tile"><div class="type-label text-[10px] text-muted-foreground mb-1.5">Estimate</div><div id="stEstimate" class="stat-num text-primary"></div><div id="stEstimateSub" class="text-[11px] text-muted-foreground mt-1"></div></div>
+        <div class="stat-tile"><div class="type-label text-[10px] text-muted-foreground mb-1.5">Blast radius</div><div id="stBlast" class="stat-num text-warning"></div><div id="stBlastSub" class="text-[11px] text-muted-foreground mt-1 font-display"></div></div>
+        <div class="stat-tile"><div class="type-label text-[10px] text-muted-foreground mb-1.5">Open questions</div><div id="stOpen" class="stat-num"></div><div id="stOpenSub" class="text-[11px] text-muted-foreground mt-1"></div></div>
+        <div class="stat-tile"><div class="type-label text-[10px] text-muted-foreground mb-1.5">Coverage gate</div><div id="stCoverage" class="stamp-verdict text-sm"></div><div id="stCoverageSub" class="text-[11px] text-muted-foreground mt-1.5"></div></div>
+      </div>
+
+      <div class="flex items-center gap-1 mb-5 border-b border-border" id="tabs">
+        <button data-tab="prd" class="doc-tab">PRD</button>
+        <button data-tab="trd" class="doc-tab">TRD</button>
+        <button data-tab="oq" class="doc-tab">Open Questions</button>
+      </div>
+
+      <div class="grid md:grid-cols-[1fr_230px] gap-8 items-start">
+        <div class="paper paper-torn p-6">
+          <div id="tab-prd" class="prose-doc max-w-[68ch]"></div>
+          <div id="tab-trd" class="prose-doc max-w-[68ch]" hidden></div>
+          <div id="tab-oq" hidden></div>
+        </div>
+        <aside class="space-y-4">
+          <div class="paper p-4"><div class="type-label text-[10px] text-muted-foreground mb-2.5">Grounded in</div><div id="railGrounded" class="flex flex-wrap gap-1.5"></div></div>
+          <div class="paper p-4"><div class="type-label text-[10px] text-muted-foreground mb-2.5">Driving the estimate</div><ul id="railDriving" class="space-y-2 text-[12px] text-muted-foreground"></ul></div>
+        </aside>
+      </div>
+
+      <div id="gh-box" class="hidden mt-5 paper border-success/50 text-foreground px-4 py-3 text-sm"></div>
+      <div id="gh-err" class="hidden mt-5 paper border-destructive/50 text-destructive px-4 py-3 text-sm"></div>
+
+      <div class="flex justify-end mt-6">
+        <button onclick="goStep(2)" class="btn-ghost inline-flex items-center h-9 px-4">← Back to clarification</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="mt-auto border-t border-border px-6 py-4 text-center type-label text-[10px] text-muted-foreground">
+    repo context reader • clarification agent • blast-radius heuristic • edge-case agent • classifier • estimate generator • coverage gate
+  </footer>
+</div>
+
+<script>
+function currentTheme(){
+  const explicit = document.documentElement.getAttribute('data-theme');
+  if(explicit) return explicit;
+  return matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+function paintThemeIcon(){
+  const t = currentTheme();
+  document.getElementById('iconSun').hidden = (t === 'light');
+  document.getElementById('iconMoon').hidden = (t === 'dark');
+}
+function toggleTheme(){
+  document.documentElement.setAttribute('data-theme', currentTheme() === 'dark' ? 'light' : 'dark');
+  paintThemeIcon();
+}
+paintThemeIcon();
+
+function h(tag, attrs, ...kids){
+  const e = document.createElement(tag);
+  if(attrs) for(const k in attrs){ if(k==='class') e.className = attrs[k]; else e.setAttribute(k, attrs[k]); }
+  for(const kid of kids.flat(Infinity)){ if(kid===null||kid===undefined||kid==='') continue; e.append(kid.nodeType ? kid : document.createTextNode(kid)); }
+  return e;
+}
+const cite = t => h('span',{class:'cite'}, t);
+const set = (id, ...nodes) => document.getElementById(id).replaceChildren(...nodes);
+function setStatus(el, tone, text){ if(!el) return; el.replaceChildren(h('span',{class:`dot w-1.5 h-1.5 rounded-full bg-${tone}`}), h('span',{}, text)); }
+function showErr(id, msg){ const el = document.getElementById(id); el.textContent = msg; el.classList.remove('hidden'); }
+function hideErr(id){ document.getElementById(id).classList.add('hidden'); }
+
+function goStep(n){
+  for(let i=1;i<=3;i++) document.getElementById('panel-'+i).hidden = (i!==n);
+  document.querySelectorAll('.folder-tab').forEach(b=>b.setAttribute('data-active', Number(b.dataset.step)===n));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.getElementById('stepper').addEventListener('click', e=>{
+  const b=e.target.closest('.folder-tab');
+  if(b && !b.disabled) goStep(Number(b.dataset.step));
+});
+
+// ---- Minimal markdown -> DOM renderer for PRD/TRD (### headings, paragraphs,
+// "- " bullet lists, **bold**, `code` spans). Not a general parser -- just
+// enough for what the Document Generator produces. ----
+function renderMarkdown(md){
+  const container = h('div', {});
+  const lines = (md || '').split('\n');
+  let listBuf = null;
+  const flushList = () => { if(listBuf){ container.append(listBuf); listBuf = null; } };
+  const inlineNodes = (text) => {
+    const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+    return parts.map(p => {
+      if(p.startsWith('**') && p.endsWith('**')) return h('strong',{}, p.slice(2,-2));
+      if(p.startsWith('`') && p.endsWith('`')) return h('code',{}, p.slice(1,-1));
+      return p;
+    });
+  };
+  for(const raw of lines){
+    const line = raw.trim();
+    if(!line){ flushList(); continue; }
+    if(line.startsWith('### ')){ flushList(); container.append(h('h3',{}, line.slice(4))); continue; }
+    if(line.startsWith('## ')){ flushList(); container.append(h('h3',{}, line.slice(3))); continue; }
+    if(line.startsWith('# ')){ flushList(); container.append(h('h3',{}, line.slice(2))); continue; }
+    if(/^[-*]\s+/.test(line)){
+      if(!listBuf) listBuf = h('ul',{});
+      listBuf.append(h('li',{}, ...inlineNodes(line.replace(/^[-*]\s+/, ''))));
+      continue;
+    }
+    flushList();
+    container.append(h('p',{}, ...inlineNodes(line)));
+  }
+  flushList();
+  return container;
+}
+
+// ---- State ----
+let state = { sessionId: null, questions: [], repoLabel: '', repoPath: '' };
+
+async function api(path, opts){
+  const res = await fetch('/api' + path, {
+    method: opts?.method || 'GET',
+    headers: { 'content-type': 'application/json' },
+    body: opts?.body ? JSON.stringify(opts.body) : undefined,
+  });
+  let data;
+  try { data = await res.json(); } catch { data = {}; }
+  if(!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+  return data;
+}
+
+fetch('/api/health').then(r=>r.json()).then(d => {
+  document.getElementById('providerBadge').textContent = 'LLM: ' + (d.llmProvider || 'unknown');
+}).catch(()=>{});
+
+async function submitIntake(){
+  hideErr('err1');
+  const description = document.getElementById('f-desc').value.trim();
+  const repoPath = document.getElementById('f-repo').value.trim();
+  const githubPat = document.getElementById('f-pat').value.trim();
+  if(!description || !repoPath){ showErr('err1', 'Feature description and repo path are both required.'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  const original = btn.textContent;
+  btn.disabled = true; btn.classList.add('btn-loading');
+  btn.textContent = 'Reading repo…';
+  setStatus(document.getElementById('idleStatus1'), 'warning', 'Reading repo & generating questions…');
+
+  try{
+    const data = await api('/sessions', { method: 'POST', body: { description, repoPath, githubPat: githubPat || undefined } });
+    state.sessionId = data.sessionId;
+    state.questions = data.questions;
+    state.repoLabel = data.repo.label;
+    state.repoPath = repoPath;
+
+    document.getElementById('bcRepo2').textContent = repoPath;
+    set('scanPills', ...data.repo.scanPills.map(p => h('span',{class:'index-tab'}, p.label)));
+    renderQuestions(data.questions);
+    document.querySelectorAll('.folder-tab')[1].disabled = false;
+    goStep(2);
+  } catch(err){
+    showErr('err1', err.message);
+  } finally {
+    btn.disabled = false; btn.classList.remove('btn-loading'); btn.textContent = original;
+    setStatus(document.getElementById('idleStatus1'), 'success', 'Idle — nothing running');
+  }
+}
+
+function renderQuestions(questions){
+  set('qsheet', ...questions.map(q => {
+    const textarea = h('textarea',{rows:'2', 'data-qid': q.id, class:'flex w-full border border-input bg-transparent px-3 py-2 text-[14px] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring', style:'border-radius:var(--radius)'});
+    const flagRow = h('div',{class:'flex gap-2 mt-2.5'},
+      h('button',{type:'button', class:'flag-btn', 'data-flag':'vague', 'data-qid': q.id}, 'Mark vague'),
+      h('button',{type:'button', class:'flag-btn', 'data-flag':'skip', 'data-qid': q.id}, 'Skip')
+    );
+    const questionNodes = q.groundedFile
+      ? [q.question.replace(q.groundedFile, '').trim() || q.question, ' ', cite(q.groundedFile)]
+      : [q.question];
+    return h('div',{class:'paper p-5 grid md:grid-cols-[120px_1fr] gap-4', 'data-question-card': q.id},
+      h('div',{class:'flex md:flex-col gap-2 md:gap-1.5 items-start'},
+        h('span',{class:'exhibit-tab'}, `Exhibit ${String(q.seq).padStart(2,'0')}`),
+        h('span',{class:'exhibit-axis'}, q.axis)
+      ),
+      h('div',{}, h('p',{class:'text-[15px] mb-3 leading-snug'}, ...questionNodes), textarea, flagRow)
+    );
+  }));
+
+  document.querySelectorAll('.flag-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('[data-question-card]');
+      const isActive = btn.getAttribute('data-active') === 'true';
+      card.querySelectorAll('.flag-btn').forEach(b => b.setAttribute('data-active', 'false'));
+      const ta = card.querySelector('textarea');
+      if(!isActive){
+        btn.setAttribute('data-active', 'true');
+        ta.disabled = btn.dataset.flag === 'skip';
+        if(btn.dataset.flag === 'skip') ta.value = '';
+      } else {
+        ta.disabled = false;
+      }
+    });
+  });
+}
+
+function collectAnswers(){
+  return state.questions.map(q => {
+    const card = document.querySelector(`[data-question-card="${q.id}"]`);
+    const flaggedBtn = card.querySelector('.flag-btn[data-active="true"]');
+    const answer = card.querySelector('textarea').value.trim();
+    return { questionId: q.id, answer: answer || null, flagged: flaggedBtn ? flaggedBtn.dataset.flag : null };
+  });
+}
+
+async function submitAnswers(){
+  hideErr('err2');
+  const btn = document.getElementById('answersBtn');
+  const original = btn.textContent;
+  btn.disabled = true; btn.classList.add('btn-loading');
+  btn.textContent = 'Classifying edge cases…';
+  setStatus(document.getElementById('idleStatus2'), 'warning', 'Running analysis…');
+
+  try{
+    const answers = collectAnswers();
+    const data = await api(`/sessions/${state.sessionId}/answers`, { method: 'POST', body: { answers } });
+    renderResults(data);
+    document.querySelectorAll('.folder-tab')[2].disabled = false;
+    goStep(3);
+  } catch(err){
+    showErr('err2', err.message);
+  } finally {
+    btn.disabled = false; btn.classList.remove('btn-loading'); btn.textContent = original;
+    setStatus(document.getElementById('idleStatus2'), 'success', 'Idle — nothing running');
+  }
+}
+
+function renderResults(data){
+  document.getElementById('bcRepo3').textContent = state.repoLabel;
+  document.getElementById('bcSession').textContent = 'session ' + data.sessionId.slice(0, 8);
+  document.getElementById('resTitle').textContent = state.repoLabel + ' — feature spec';
+
+  document.getElementById('stEstimate').textContent = `${data.estimate.low}–${data.estimate.high}d`;
+  document.getElementById('stEstimateSub').textContent = `up to ${data.estimate.worst}d worst case`;
+  document.getElementById('stBlast').textContent = data.blastRadius.count;
+  document.getElementById('stBlastSub').textContent = data.blastRadius.file || '(none identified)';
+
+  const counts = { PRODUCT_DECISION: 0, ENGINEERING_DECISION: 0, ASSUMPTION_MADE: 0 };
+  data.openQuestions.forEach(q => { if(counts[q.category] !== undefined) counts[q.category]++; });
+  document.getElementById('stOpen').textContent = data.openQuestions.length;
+  document.getElementById('stOpenSub').textContent = `${counts.PRODUCT_DECISION} product · ${counts.ENGINEERING_DECISION} eng · ${counts.ASSUMPTION_MADE} assumption`;
+
+  const passed = data.coverageGate.passed;
+  const stCoverage = document.getElementById('stCoverage');
+  stCoverage.textContent = passed ? 'Verified' : 'Incomplete';
+  stCoverage.className = 'stamp-verdict text-sm ' + (passed ? 'text-success' : 'text-destructive');
+  document.getElementById('stCoverageSub').textContent = passed ? 'all findings reached the docs' : `${data.coverageGate.missing.length} finding(s) missing from docs`;
+
+  set('resPills',
+    h('span',{class:'index-tab'}, `Estimate ${data.estimate.low}–${data.estimate.high}d`),
+    h('span',{class:'index-tab'}, `${data.blastRadius.count} references`),
+    h('span',{class:`index-tab ${passed ? 'text-success' : 'text-destructive'}`}, passed ? 'Coverage passed' : 'Coverage failed')
+  );
+
+  set('tab-prd', renderMarkdown(data.prd));
+  set('tab-trd', renderMarkdown(data.trd));
+
+  const toneFor = c => c === 'PRODUCT_DECISION' ? 'text-primary' : c === 'ENGINEERING_DECISION' ? 'text-violet' : 'text-warning';
+  const labelFor = c => c === 'PRODUCT_DECISION' ? 'Product' : c === 'ENGINEERING_DECISION' ? 'Engineering' : 'Assumption';
+  set('tab-oq', h('div',{class:'space-y-3'}, ...data.openQuestions.map(q =>
+    h('div',{class:'flex gap-4 items-start paper p-4'},
+      h('span',{class:`exhibit-tab ${toneFor(q.category)}`, style:'background:transparent; border:1.5px solid currentColor;'}, labelFor(q.category)),
+      h('div',{}, h('p',{class:'text-[14px]'}, q.text), h('p',{class:'text-[11px] text-muted-foreground font-display mt-1'}, q.source || `confidence: ${q.confidence}`))
+    )
+  )));
+
+  set('railGrounded', ...(data.grounded.length ? data.grounded.map(f => h('span',{class:'index-tab'}, f)) : [h('span',{class:'text-xs text-muted-foreground'}, 'none')]));
+  set('railDriving', ...(data.driving.length ? data.driving.map(d => h('li',{}, d)) : [h('li',{}, 'no strong driving factors identified')]));
+
+  document.getElementById('gh-box').classList.add('hidden');
+  document.getElementById('gh-err').classList.add('hidden');
+  const ghBtn = document.getElementById('gh-btn');
+  ghBtn.textContent = 'Submit to record →'; ghBtn.disabled = false;
+
+  document.querySelectorAll('#tabs .doc-tab').forEach(x=>x.setAttribute('data-active', x.dataset.tab==='prd'));
+  document.getElementById('tab-prd').hidden = false;
+  document.getElementById('tab-trd').hidden = true;
+  document.getElementById('tab-oq').hidden = true;
+}
+
+document.getElementById('tabs').addEventListener('click', e=>{
+  const b = e.target.closest('.doc-tab'); if(!b) return;
+  document.querySelectorAll('#tabs .doc-tab').forEach(x=>x.setAttribute('data-active', x===b));
+  ['prd','trd','oq'].forEach(id=> document.getElementById('tab-'+id).hidden = (id!==b.dataset.tab));
+});
+
+async function pushGithub(){
+  document.getElementById('gh-box').classList.add('hidden');
+  document.getElementById('gh-err').classList.add('hidden');
+  const pat = document.getElementById('f-pat-2').value.trim();
+  if(!pat){ document.getElementById('gh-err').textContent = 'Paste a GitHub PAT above to push issues.'; document.getElementById('gh-err').classList.remove('hidden'); return; }
+
+  const btn = document.getElementById('gh-btn');
+  btn.disabled = true; btn.classList.add('btn-loading'); btn.textContent = 'Pushing…';
+  try{
+    const data = await api(`/sessions/${state.sessionId}/github`, { method: 'POST', body: { githubPat: pat } });
+    set('gh-box',
+      h('span',{class:'font-display font-bold text-success'}, `✓ Created ${data.issues.length} issue(s) in ${state.repoLabel}`),
+      h('ul',{class:'list-disc pl-5 mt-2 space-y-1 text-xs text-muted-foreground'}, ...data.issues.map(i => h('li',{}, h('a',{href:i.url, target:'_blank', class:'underline'}, `#${i.number}`), ' — ' + i.title)))
+    );
+    document.getElementById('gh-box').classList.remove('hidden');
+    btn.textContent = '✓ Pushed to GitHub';
+  } catch(err){
+    document.getElementById('gh-err').textContent = err.message;
+    document.getElementById('gh-err').classList.remove('hidden');
+    btn.disabled = false; btn.classList.remove('btn-loading'); btn.textContent = 'Submit to record →';
+  }
+}
+</script>
+
+</body></html>

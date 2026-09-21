@@ -1,0 +1,200 @@
+[
+  {
+    "id": "damco-pdf-export",
+    "repo": "damco",
+    "description": "Add a way to export a session's PRD and TRD as a downloadable PDF instead of just viewing markdown in the browser.",
+    "tags": ["damco", "node-express"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should the export be a button on the results page, or a separate route?", "answer": "A button on the results page next to the existing tabs.", "flagged": null },
+      { "axis": "data model impact", "question": "Should generated PDFs be stored, or generated on demand each time?", "answer": "Generated on demand, no storage needed.", "flagged": null },
+      { "axis": "who is affected", "question": "Anyone with the session link, or only the session creator?", "answer": null, "flagged": "skip" }
+    ]
+  },
+  {
+    "id": "damco-rate-limit",
+    "repo": "damco",
+    "description": "Add rate limiting to the API so one client can't hammer the LLM-backed endpoints and run up the bill.",
+    "tags": ["damco", "node-express"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should rate-limited requests get a 429 with a retry-after, or silently queue?", "answer": "429 with retry-after, keep it simple.", "flagged": null },
+      { "axis": "data model impact", "question": "Per-IP limits or per-session limits?", "answer": "Not sure, whatever's easiest to ship first.", "flagged": "vague" },
+      { "axis": "explicit out-of-scope", "question": "Should this cover the static file routes too, or just /api?", "answer": "Just /api.", "flagged": null }
+    ]
+  },
+  {
+    "id": "damco-cache-repo-reads",
+    "repo": "damco",
+    "description": "Cache repo reads so re-running the pipeline against the same repo path doesn't re-walk the whole filesystem every time.",
+    "tags": ["damco", "node-express"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should there be a way to force a fresh scan, bypassing the cache?", "answer": "Yes, a flag or query param to force refresh.", "flagged": null },
+      { "axis": "data model impact", "question": "In-memory cache or persisted to Postgres?", "answer": "In-memory is fine for now.", "flagged": null },
+      { "axis": "who is affected", "question": "Does this affect the git-clone path (temp dirs) too, or only local paths?", "answer": null, "flagged": "skip" }
+    ]
+  },
+  {
+    "id": "damco-auth",
+    "repo": "damco",
+    "description": "Add user authentication so sessions are scoped to a logged-in user instead of anyone with the session id being able to view it.",
+    "tags": ["damco", "node-express"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Email/password login, or an OAuth provider?", "answer": "Email/password is fine for v1.", "flagged": null },
+      { "axis": "data model impact", "question": "Does the sessions table need a user_id column, or a separate join table?", "answer": "A user_id column on sessions should be enough.", "flagged": null },
+      { "axis": "explicit out-of-scope", "question": "Should this also gate the GitHub write-back endpoint, or is that already implicitly protected by needing a PAT?", "answer": "Gate it too, for consistency.", "flagged": null }
+    ]
+  },
+  {
+    "id": "damco-edit-resubmit",
+    "repo": "damco",
+    "description": "Let users edit and resubmit their answers after seeing the PRD/TRD, without having to start a whole new session.",
+    "tags": ["damco", "node-express"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should resubmitting re-run the whole pipeline, or just regenerate the docs?", "answer": "Re-run the whole pipeline, answers might change findings too.", "flagged": null },
+      { "axis": "data model impact", "question": "Should old findings/documents be overwritten or versioned?", "answer": "Whatever is simplest, versioning can come later.", "flagged": "vague" },
+      { "axis": "who is affected", "question": "Should this be limited to sessions that haven't been pushed to GitHub yet?", "answer": "Good question, yes let's limit it to that.", "flagged": null }
+    ]
+  },
+  {
+    "id": "damco-delete-old-sessions",
+    "repo": "damco",
+    "description": "Add a way to automatically delete sessions older than 30 days to keep the database from growing unbounded.",
+    "tags": ["damco", "node-express"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should this run as a scheduled job, or on-demand via an admin endpoint?", "answer": "A scheduled job, doesn't need to be triggered manually.", "flagged": null },
+      { "axis": "data model impact", "question": "Hard delete or soft delete (a deleted_at column)?", "answer": null, "flagged": "skip" },
+      { "axis": "explicit out-of-scope", "question": "Should this also clean up cloned temp repo directories from the git-clone path?", "answer": "Not sure, hadn't thought about that.", "flagged": "vague" }
+    ]
+  },
+  {
+    "id": "flask-password-reset",
+    "repo": "flask",
+    "description": "Add password reset via email for users who forgot their password.",
+    "tags": ["flask", "python"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should the reset link expire after a set time?", "answer": "Yes, 1 hour expiry.", "flagged": null },
+      { "axis": "data model impact", "question": "Does the User model need a password hash field currently, and does it need a reset-token field added?", "answer": "Need to add a reset token field, not sure what exists currently.", "flagged": "vague" },
+      { "axis": "who is affected", "question": "All users, or only ones who signed up with email/password (vs SSO, if that ever exists)?", "answer": "All users for now, there's no SSO.", "flagged": null }
+    ]
+  },
+  {
+    "id": "flask-pagination",
+    "repo": "flask",
+    "description": "Add pagination to the users list endpoint so it doesn't return the whole table at once.",
+    "tags": ["flask", "python"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Page-number based or cursor based pagination?", "answer": "Page-number based, simplest for the frontend.", "flagged": null },
+      { "axis": "data model impact", "question": "What should the default and max page size be?", "answer": "20 default, 100 max.", "flagged": null },
+      { "axis": "explicit out-of-scope", "question": "Should sorting/filtering be added at the same time, or strictly pagination only?", "answer": null, "flagged": "skip" }
+    ]
+  },
+  {
+    "id": "flask-avatar-upload",
+    "repo": "flask",
+    "description": "Support file uploads so users can set a profile avatar image.",
+    "tags": ["flask", "python"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should there be client-side image cropping, or just accept whatever's uploaded?", "answer": "Just accept it for v1, no cropping.", "flagged": null },
+      { "axis": "data model impact", "question": "Store the image on disk with a path column, or in a blob store?", "answer": "Disk with a path column is fine to start.", "flagged": null },
+      { "axis": "who is affected", "question": "Any file size or type restrictions needed?", "answer": "Yes, images only, some reasonable size cap.", "flagged": null }
+    ]
+  },
+  {
+    "id": "flask-health-check",
+    "repo": "flask",
+    "description": "Add a health check endpoint for the load balancer to hit.",
+    "tags": ["flask", "python"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should it just return 200 OK, or also check DB connectivity?", "answer": "Check DB connectivity too, that's the whole point.", "flagged": null },
+      { "axis": "data model impact", "question": "No new data model needed here, correct?", "answer": "Correct, none needed.", "flagged": null },
+      { "axis": "explicit out-of-scope", "question": "Should this expose any other service metrics, or strictly up/down?", "answer": "Strictly up/down.", "flagged": null }
+    ]
+  },
+  {
+    "id": "flask-frontend-migration",
+    "repo": "flask",
+    "description": "Migrate the server-rendered templates to use a proper frontend framework instead of Jinja templates.",
+    "tags": ["flask", "python"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should this be a gradual page-by-page migration, or a full rewrite?", "answer": "Gradual, page by page.", "flagged": null },
+      { "axis": "data model impact", "question": "Does the backend need to expose new JSON API endpoints for the pages being migrated?", "answer": "Yes, probably.", "flagged": null },
+      { "axis": "who is affected", "question": "Which framework, if you have a preference?", "answer": "No strong preference, whatever's simplest.", "flagged": "vague" }
+    ]
+  },
+  {
+    "id": "react-dark-mode",
+    "repo": "react",
+    "description": "Add a dark mode toggle to the dashboard.",
+    "tags": ["react", "frontend"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Should the preference persist across sessions?", "answer": "Yes, remember the choice.", "flagged": null },
+      { "axis": "data model impact", "question": "Store the preference in localStorage, or on a user profile in the backend?", "answer": "localStorage is fine, no backend needed.", "flagged": null },
+      { "axis": "explicit out-of-scope", "question": "Should it follow system preference by default, or default to light?", "answer": null, "flagged": "skip" }
+    ]
+  },
+  {
+    "id": "react-form-validation",
+    "repo": "react",
+    "description": "Add client-side form validation to the signup form.",
+    "tags": ["react", "frontend"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Show errors inline as the user types, or only on submit?", "answer": "Inline as they type, better UX.", "flagged": null },
+      { "axis": "data model impact", "question": "Does this need a validation library, or hand-rolled checks?", "answer": "Whatever's simplest, no strong opinion.", "flagged": "vague" },
+      { "axis": "who is affected", "question": "Is there an existing signup form in the codebase, or does this need to be built first?", "answer": "Not sure, would need to check.", "flagged": "vague" }
+    ]
+  },
+  {
+    "id": "react-loading-skeleton",
+    "repo": "react",
+    "description": "Add a loading skeleton while the dashboard data fetches, instead of a blank screen.",
+    "tags": ["react", "frontend"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Skeleton matching the final layout, or a generic spinner?", "answer": "A skeleton matching the layout, looks more polished.", "flagged": null },
+      { "axis": "data model impact", "question": "No new data model needed here, correct?", "answer": "Correct.", "flagged": null },
+      { "axis": "explicit out-of-scope", "question": "Should this also cover error states, or strictly the loading state?", "answer": "Strictly loading for this pass.", "flagged": null }
+    ]
+  },
+  {
+    "id": "react-error-boundary",
+    "repo": "react",
+    "description": "Add an error boundary so one broken component doesn't crash the whole app.",
+    "tags": ["react", "frontend"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Show a generic fallback message, or something component-specific?", "answer": "A generic fallback is fine to start.", "flagged": null },
+      { "axis": "data model impact", "question": "Should errors be logged anywhere, or just caught and displayed?", "answer": "Just caught and displayed for now.", "flagged": null },
+      { "axis": "who is affected", "question": "One top-level boundary, or one per major section?", "answer": null, "flagged": "skip" }
+    ]
+  },
+  {
+    "id": "react-api-tests",
+    "repo": "react",
+    "description": "Add unit tests for the API client module.",
+    "tags": ["react", "frontend"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "N/A for this one -- any preference on test runner?", "answer": "Whatever's already set up, if anything.", "flagged": "vague" },
+      { "axis": "data model impact", "question": "Should network calls be mocked, or hit a test server?", "answer": "Mocked, no test server available.", "flagged": null },
+      { "axis": "explicit out-of-scope", "question": "Should this cover component tests too, or strictly the API client?", "answer": "Strictly the API client for now.", "flagged": null }
+    ]
+  },
+  {
+    "id": "flask-role-permissions",
+    "repo": "flask",
+    "description": "Add role-based permissions so admins can do things regular users can't.",
+    "tags": ["flask", "python"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Just admin vs regular user, or a fuller role system?", "answer": "Just admin vs regular for now.", "flagged": null },
+      { "axis": "data model impact", "question": "Add a role column to the User model, or a separate roles table?", "answer": "A role column is simplest.", "flagged": null },
+      { "axis": "who is affected", "question": "Which existing endpoints need to become admin-only?", "answer": "Not sure yet, need to figure that out.", "flagged": "vague" }
+    ]
+  },
+  {
+    "id": "react-i18n",
+    "repo": "react",
+    "description": "Add internationalization so the dashboard can support multiple languages.",
+    "tags": ["react", "frontend"],
+    "answers": [
+      { "axis": "user-facing behavior", "question": "Which languages first?", "answer": "English and Spanish to start.", "flagged": null },
+      { "axis": "data model impact", "question": "Store the language preference client-side, or per-user in a backend that doesn't exist yet?", "answer": "Client-side, there's no backend for this app.", "flagged": null },
+      { "axis": "explicit out-of-scope", "question": "Should this cover date/number formatting too, or strictly UI strings?", "answer": null, "flagged": "skip" }
+    ]
+  }
+]

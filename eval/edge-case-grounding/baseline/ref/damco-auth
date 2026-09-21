@@ -1,0 +1,44 @@
+[
+  {
+    "filePath": "package.json",
+    "description": "Missing dependencies for secure password hashing (e.g., bcrypt or argon2) and authentication/session management (e.g., jsonwebtoken or cookie-session).",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/db/schema.sql",
+    "description": "Database schema lacks a 'users' table and a 'user_id' foreign key on 'sessions'. Existing sessions in the database will have null user_id values, requiring a migration strategy to handle or backfill orphaned sessions.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/routes/sessions.js",
+    "description": "Session retrieval and mutation endpoints currently allow public access via session ID. Authorization middleware and ownership checks must be added, with 404/403 responses designed to prevent session ID enumeration across users.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/routes/sessions.js",
+    "description": "GitHub writeback calls must be restricted to verified session owners to prevent authenticated users from dispatching writebacks for sessions they do not own.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "public/index.html",
+    "description": "Frontend has no user interface for registration, login, logout, or managing authenticated state, and lacks error-handling flows for 401 Unauthorized or expired authentication sessions.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": "env.example",
+    "description": "Missing environment configuration for authentication signing secrets (e.g., JWT_SECRET or SESSION_SECRET) and token expiration duration.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Risk of account collision or injection without explicit validation rules for email normalization (case insensitivity, whitespace trimming) and password complexity during registration.",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

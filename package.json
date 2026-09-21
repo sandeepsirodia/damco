@@ -1,0 +1,32 @@
+{
+  "name": "spec-clarity",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Repo-aware feature-spec clarifier: raw ask + repo -> clarifying questions -> grounded PRD/TRD.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test tests/*.test.js",
+    "eval": "node eval/run-eval.mjs --flow eval/edge-case-grounding --variant baseline",
+    "eval:docs": "node eval/run-doc-eval.mjs --flow eval/doc-generator-grounding --variant baseline",
+    "eval:questions": "node eval/run-question-eval.mjs --flow eval/question-quality --variant baseline",
+    "eval:chat": "node eval/run-chat-eval.mjs"
+  },
+  "dependencies": {
+    "@copilotkit/runtime": "^1.72.0",
+    "@langfuse/otel": "^5.11.1",
+    "@langfuse/tracing": "^5.11.1",
+    "@opentelemetry/resources": "^2.11.0",
+    "@opentelemetry/sdk-trace-node": "^2.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "ignore": "^5.3.2",
+    "pg": "^8.13.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

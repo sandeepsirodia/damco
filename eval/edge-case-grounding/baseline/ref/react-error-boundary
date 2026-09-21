@@ -1,0 +1,32 @@
+[
+  {
+    "filePath": "src/App.jsx",
+    "description": "If a single top-level ErrorBoundary is wrapped around the root of App.jsx, any child error will unmount the entire application tree—including Header and navigation—rather than isolating the failure to the broken component.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/App.jsx",
+    "description": "React Router v6 includes its own route-level error handling via 'errorElement'. Using a generic React component error boundary without integrating with react-router-dom loaders/actions could cause routing errors to bypass the boundary or behave inconsistently.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": "src/api/client.js",
+    "description": "React Error Boundaries only catch errors during rendering, lifecycle methods, and constructors. Unhandled promise rejections or asynchronous errors originating from API calls in client.js will not trigger the boundary unless explicitly captured and re-thrown into React render state.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "package.json",
+    "description": "Functional components cannot be used to create an Error Boundary in React without a class component (implementing componentDidCatch/getDerivedStateFromError) or installing a helper library like 'react-error-boundary'.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Without a reset or recovery mechanism (such as resetting state on route change or providing a 'Retry' button), users will remain locked in the fallback UI with no way to recover without a full page refresh.",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

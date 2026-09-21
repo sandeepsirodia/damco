@@ -1,0 +1,29 @@
+{
+  "metrics": {
+    "axis_correct": {
+      "label": "Axis Sequence Correct",
+      "kind": "binary"
+    },
+    "repo_finding_grounded": {
+      "label": "Repo Finding Grounded",
+      "kind": "binary"
+    },
+    "distinct": {
+      "label": "Questions Distinct (judge)",
+      "kind": "binary"
+    },
+    "specific": {
+      "label": "Questions Specific (judge)",
+      "kind": "binary"
+    },
+    "classifier_sound": {
+      "label": "Classifier Triage Sound (judge)",
+      "kind": "binary"
+    }
+  },
+  "perf_fields": [
+    "question_count",
+    "open_question_count"
+  ],
+  "harness_sha": "fc70aef84d3ede61e5ef394a0f667befb10613fde91296327b65753871227984"
+}

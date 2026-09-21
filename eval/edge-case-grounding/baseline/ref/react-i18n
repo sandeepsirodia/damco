@@ -1,0 +1,32 @@
+[
+  {
+    "filePath": "package.json",
+    "description": "No internationalization library (such as react-i18next or formatjs) is present in package.json; a new dependency or custom context-based translation framework will need to be added.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/App.jsx",
+    "description": "App root must initialize the i18n context/provider and handle client-side persistence (e.g., localStorage reading/writing with fallback to browser locale).",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/components/Header.jsx",
+    "description": "Header will need to host the language switcher control and react to locale state changes.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Date, currency, and number formatting scope remains unclarified; if dashboard metrics contain dates or formatted numbers, simple string translation will leave them unlocalized.",
+    "confidence": "medium",
+    "grounded": false
+  },
+  {
+    "filePath": null,
+    "description": "Missing translation keys risk: without a defined fallback strategy (defaulting to English), incomplete Spanish translation dictionaries may render empty strings or raw translation keys.",
+    "confidence": "high",
+    "grounded": false
+  }
+]

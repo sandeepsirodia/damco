@@ -1,0 +1,26 @@
+[
+  {
+    "filePath": null,
+    "description": "No signup form component or route currently exists in the repository; the signup form UI and state structure will need to be created from scratch before validation can be applied.",
+    "confidence": "high",
+    "grounded": false
+  },
+  {
+    "filePath": "package.json",
+    "description": "No form management or schema validation dependencies (such as React Hook Form, Formik, Zod, or Yup) are installed, requiring either new dependencies or custom state/regex validation logic.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Validating inline on every keystroke can cause premature errors on fresh fields (e.g., displaying 'Invalid email' after typing the first character); proper 'touched' or 'dirty' state tracking is required to avoid poor UX.",
+    "confidence": "high",
+    "grounded": false
+  },
+  {
+    "filePath": "src/api/client.js",
+    "description": "Client-side validation rules must align with backend acceptance criteria, and form submission must still handle backend-specific validation errors (e.g., duplicate email) returned via the API client.",
+    "confidence": "medium",
+    "grounded": true
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "filePath": "src/pipeline/repoReader.js",
+    "description": "Cache keys based on raw path strings can lead to misses or duplicate entries if paths have differing formats (e.g., relative paths, trailing slashes, or symlinks) unless normalized via path.resolve.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/pipeline/repoReader.js",
+    "description": "In-memory caching keyed only by path will return stale files and contents if files in the local repository are modified or git branches change between pipeline runs without a force-refresh trigger.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/pipeline/repoReader.js",
+    "description": "Downstream pipeline steps that manipulate or mutate returned file metadata or lists could inadvertently mutate cached in-memory structures if items are returned by reference rather than cloned.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": "src/routes/sessions.js",
+    "description": "The session creation endpoint must parse, validate, and forward the cache-bypass flag (e.g., refresh query parameter or request body field) to the pipeline runner.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/pipeline/index.js",
+    "description": "The pipeline coordinator must accept the force-refresh flag from incoming session options and explicitly pass it down to repoReader.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "An unbounded in-memory cache holding file lists and file contents across multiple repos without a TTL or LRU eviction strategy risks Node.js process out-of-memory (OOM) crashes.",
+    "confidence": "high",
+    "grounded": false
+  },
+  {
+    "filePath": null,
+    "description": "If repos are checked out or cloned into unique temporary directories per run, caching by filesystem path will cause 0% cache hits unless keyed by remote URL or commit SHA.",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "filePath": "package.json",
+    "description": "No skeleton loading or styling library (e.g., react-loading-skeleton, Tailwind, or CSS animation utility) is installed; skeleton styles and shimmer animations will need to be written from scratch or a dependency added.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/App.jsx",
+    "description": "Risk of cumulative layout shift (CLS) if skeleton component dimensions, paddings, and grid layout do not precisely mirror the rendered dashboard components.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/App.jsx",
+    "description": "On fast connections or cached responses, displaying the skeleton immediately can cause a noticeable and jarring visual flash unless delayed or debounced.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Accessibility risk: Skeleton placeholders need proper ARIA roles and attributes (such as aria-busy=\"true\" and aria-live=\"polite\") to inform assistive technologies that content is actively loading.",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "filePath": "package.json",
+    "description": "No test runner (such as Vitest or Jest) or test execution script is currently configured or installed in package.json.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "package.json",
+    "description": "No mocking utilities (such as MSW, jest-fetch-mock, or node-fetch mocks) are installed to mock HTTP network calls as requested.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/api/client.js",
+    "description": "Tests will need to account for network edge cases including HTTP 4xx/5xx error responses, network timeouts, abort signals, and non-JSON/malformed payload bodies.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "Risk of missing global fetch support depending on the runtime environment and test runner selected (may require fetch polyfill if running in a Node environment without native fetch).",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "filePath": "app.py",
+    "description": "If the database is unreachable or times out, an unhandled SQLAlchemy exception (such as OperationalError) could crash the worker or hang requests; the endpoint must catch connection exceptions and return an explicit HTTP 503 Service Unavailable.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "app.py",
+    "description": "DB queries on frequent load-balancer health checks can leak connections or exhaust the SQLAlchemy connection pool if the session is not explicitly closed or rolled back upon error.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "app.py",
+    "description": "Performing a live DB query on every health check without a strict socket/query timeout risks blocking Gunicorn worker processes if the database hangs, degrading overall service throughput.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "If the database suffers transient downtime or latency, coupling the health check to DB connectivity causes the load balancer to mark all app instances unhealthy at once, preventing graceful degradation or error serving.",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

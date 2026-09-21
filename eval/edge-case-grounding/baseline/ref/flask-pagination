@@ -1,0 +1,38 @@
+[
+  {
+    "filePath": "app.py",
+    "description": "Invalid query parameters: Non-integer or non-positive values for 'page' or 'per_page' (e.g., negative numbers, strings, zero) must be handled gracefully without raising unhandled 500 exceptions.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "app.py",
+    "description": "Enforcing upper bound limit: Requests with 'per_page' greater than 100 must be clamped to the maximum allowed limit of 100.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "app.py",
+    "description": "Nondeterministic ordering: Paginating queries without an explicit ORDER BY clause (e.g., sorting by primary key or creation date) can result in unstable record ordering and duplicate or skipped items across pages.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "app.py",
+    "description": "Out-of-range pages: Flask-SQLAlchemy's paginate helper raises a 404 by default when a requested page exceeds the total pages (error_out=True); the endpoint should decide whether to return a 404 or an empty list.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": "app.py",
+    "description": "API response contract breaking change: Changing the endpoint from returning a flat list of users to a paginated payload (including metadata like total count, page, and pages) will break any existing clients expecting a plain array.",
+    "confidence": "medium",
+    "grounded": true
+  },
+  {
+    "filePath": "templates/index.html",
+    "description": "Frontend compatibility: If index.html consumes the users endpoint or renders users directly, updating to pagination without updating template iteration or adding pagination controls may break the UI.",
+    "confidence": "medium",
+    "grounded": true
+  }
+]

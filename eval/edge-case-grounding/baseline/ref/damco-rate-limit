@@ -1,0 +1,38 @@
+[
+  {
+    "filePath": "package.json",
+    "description": "No rate limiting middleware (such as express-rate-limit) is installed in dependencies; adding rate limiting will require introducing an external package or building custom middleware.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/server.js",
+    "description": "Rate limiting middleware must be scoped to '/api' routes rather than static assets. Additionally, if rate limiting relies on client IP addresses, Express must be configured with 'trust proxy' to avoid tracking internal Docker or reverse proxy IPs.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": "src/routes/sessions.js",
+    "description": "Endpoints triggering LLM execution must respond with HTTP 429 and a properly formatted 'Retry-After' header when the limit is exceeded, and UI or API clients calling this route need to handle 429 responses gracefully.",
+    "confidence": "high",
+    "grounded": true
+  },
+  {
+    "filePath": null,
+    "description": "In-memory rate limiting counters will reset whenever the server process restarts and will not synchronize across multiple container replicas or worker processes without a distributed store such as Redis.",
+    "confidence": "high",
+    "grounded": false
+  },
+  {
+    "filePath": null,
+    "description": "Per-IP rate limiting based solely on request counts does not account for token volume; clients can still submit large prompts within the request limit, which may continue to drive up LLM provider costs.",
+    "confidence": "medium",
+    "grounded": false
+  },
+  {
+    "filePath": null,
+    "description": "IP-based rate limiting can inadvertently throttle multiple users behind shared corporate networks or NATs, or be circumvented by rotating IP addresses.",
+    "confidence": "medium",
+    "grounded": false
+  }
+]

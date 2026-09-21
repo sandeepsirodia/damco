@@ -1,0 +1,17 @@
+node_modules/
+web/dist/
+.env
+.env.*
+!env.example
+.DS_Store
+*.log
+
+# Eval-generated output (regenerate with: node eval/run-eval.mjs ...)
+eval/**/baseline/traces/
+eval/**/report.html
+eval/**/trajectory/
+eval/**/progress.txt
+.gstack/
+.agents/
+.claude/
+.playwright-mcp/
